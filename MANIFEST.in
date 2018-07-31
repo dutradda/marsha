@@ -1,0 +1,2 @@
+include get_version.py
+include VERSION
