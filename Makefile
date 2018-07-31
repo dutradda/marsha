@@ -2,7 +2,7 @@ NAME = marsha
 VERSION = $(shell ./get_version.py)
 GIT_DIFF = MANIFEST.in VERSION get_version.py setup.py marsha
 
-.PHONY: build-image run sdist
+.PHONY: build-image run sdist venv clean-venv deactive-venv activate-venv
 
 all: build-image run
 
@@ -24,3 +24,15 @@ run:
 		-a stdout \
 		-p 8080:8080 \
 		-t ${NAME}:${VERSION}
+
+venv:
+	./build-venv.sh
+
+clean-venv:
+	rm -rf venv
+
+deactive-venv:
+	@echo Please run: deactivate
+
+activate-venv:
+	@echo Please run: source activate-venv.sh
