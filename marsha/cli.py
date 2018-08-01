@@ -1,21 +1,8 @@
-import graphql
-import ujson
-from marsha.schema import schema
+from marsha.server import app
 
-query = \
-"""
-query Marsha {
-    media {
-        name
-    }
-}
-"""
 
 def main():
-    query_result = graphql.graphql(schema, query)
-    print(ujson.dumps(query_result.data, indent=4))
-    print()
-
+    app.run(host='0.0.0.0', port=8080)
 
 if __name__ == '__main__':
     main()

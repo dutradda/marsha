@@ -8,9 +8,8 @@ from setuptools.command.test import test as TestCommand
 from get_version import read_version
 
 install_requires = [
-    'aiohttp>=3.3.2',
-    'graphql-core>=2.1',
-    'ujson>=1.35'
+    'sanic>=0.7.0',
+    'sanic_graphql>=1.1.0'
 ]
 
 tests_require = [
