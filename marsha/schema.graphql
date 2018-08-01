@@ -1,0 +1,11 @@
+schema {
+    query: RootQuery
+}
+
+type RootQuery {
+    media: Media
+}
+
+type Media {
+    name: String!
+}
