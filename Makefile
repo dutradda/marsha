@@ -1,15 +1,13 @@
 NAME = marsha
 VERSION = $(shell ./get_version.py)
-GIT_DIFF = MANIFEST.in VERSION get_version.py setup.py marsha
+ACTIVE_MSG = "Please run: \n\tsource activate-venv.sh"
 
-.PHONY: build-image run sdist venv clean-venv deactive-venv activate-venv
+.PHONY: build-image run sdist venv clean-venv deactive-venv activate-venv build-venv
 
 all: build-image run
 
 sdist:
-	test "$(shell git diff ${GIT_DIFF} | wc -l)" -gt 0 && \
-	rm -f dist/marsha-${VERSION}.tar.gz && \
-	python setup.py sdist || echo
+	./make-lib/build-dist.sh ${VERSION}
 
 build-image: sdist
 	docker build . \
@@ -25,8 +23,11 @@ run:
 		-p 8080:8080 \
 		-t ${NAME}:${VERSION}
 
-venv:
-	./build-venv.sh
+build-venv:
+	./make-lib/build-venv.sh
+
+venv: build-venv
+	echo ${ACTIVE_MSG}
 
 clean-venv:
 	rm -rf venv
@@ -35,4 +36,7 @@ deactive-venv:
 	@echo Please run: deactivate
 
 activate-venv:
-	@echo Please run: source activate-venv.sh
+	@echo ${ACTIVE_MSG}
+
+clean-dist:
+	rm -rf dist/*

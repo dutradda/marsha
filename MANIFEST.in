@@ -1,2 +1,2 @@
 include get_version.py
-include VERSION
+include marsha/graphql/schema.graphql

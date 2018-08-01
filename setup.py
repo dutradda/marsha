@@ -8,14 +8,14 @@ from setuptools.command.test import test as TestCommand
 from get_version import read_version
 
 install_requires = [
-    'aiohttp==3.*',
-    'connexion==1.*',
-    'ujson==1.*'
+    'aiohttp>=3.3.2',
+    'graphql-core>=2.1',
+    'ujson>=1.35'
 ]
 
 tests_require = [
     'pytest',
-    'pytest-cov',
+    'pytest-cov'
 ]
 
 
@@ -67,5 +67,6 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Multimedia :: Sound/Audio'
     ],
-    entry_points={'console_scripts': ['marsha = marsha.cli:main']}
+    entry_points={'console_scripts': ['marsha = marsha.cli:main']},
+    include_package_data=True
 )

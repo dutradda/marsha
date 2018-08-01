@@ -7,5 +7,6 @@ if [ ! -d venv ]; then
         echo 'Please install virtualenv! (pip install virtualenv)'
     fi
 else
-    echo "'venv' directory already exists! Please remove it if you want to reinstall the virtual env"
+    echo "'venv' directory already exists! Please remove it (make clean-venv) if you want to reinstall the virtual env"
+    exit 1
 fi

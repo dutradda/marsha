@@ -1,21 +1,22 @@
 #!/usr/bin/env python3.6
 
-import os.path
 import datetime
+import os
+import re
 
 
 def read_version():
-    path = os.path.dirname(os.path.abspath(__file__))
-    path = os.path.join(path, 'VERSION')
+    version = os.environ.get('MARSHA_VERSION', 'dev')
 
-    with open(path) as fd:
-        version = fd.read().strip().strip("'")
+    if version == 'dev':
+        date = datetime.datetime.now().strftime('%Y%m%d')
+        version = f'{date}.{version}0'
 
-        if version == 'dev':
-            date = datetime.datetime.now().strftime('%Y%m%d')
-            version = f'{date}.{version}0'
+    elif not re.match(r'\d+\.\d+\.\d+', version):
+        raise ValueError('The version must follow the '
+                         'Semantic Versioning pattern (https://semver.org/)')
 
-        return version
+    return version
 
 
 if __name__ == '__main__':

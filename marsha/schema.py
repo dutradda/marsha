@@ -4,7 +4,7 @@ import os.path
 curr_dir = os.path.dirname(__file__)
 ast = None
 
-with open(os.path.join(curr_dir, 'schema.graphql')) as source:
+with open(os.path.join(curr_dir, 'graphql/schema.graphql')) as source:
     schema = source.read()
     ast = graphql.parse(schema)
 
