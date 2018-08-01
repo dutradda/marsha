@@ -9,7 +9,8 @@ from get_version import read_version
 
 install_requires = [
     'sanic>=0.7.0',
-    'sanic_graphql>=1.1.0'
+    'sanic_graphql>=1.1.0',
+    'ffmpeg-python>=0.1.16'
 ]
 
 tests_require = [

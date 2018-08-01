@@ -14,14 +14,17 @@ build-image: sdist
 		--build-arg "VERSION=${VERSION}" \
 		-t ${NAME}:${VERSION} \
 		-t ${NAME}:latest \
-		-f docker/Dockerfile
+		-f docker/images/marsha/Dockerfile
 
-run:
+run-marsha:
 	docker run -i \
 		-a stdin \
 		-a stdout \
 		-p 8080:8080 \
 		-t ${NAME}:${VERSION}
+
+run:
+	VERSION=${VERSION} docker-compose -f docker/docker-compose.yml up
 
 build-venv:
 	./make-lib/build-venv.sh

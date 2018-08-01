@@ -1,5 +1,6 @@
 schema {
     query: RootQuery
+    mutation: RootMutation
 }
 
 type RootQuery {
@@ -7,5 +8,14 @@ type RootQuery {
 }
 
 type Media {
-    name: String!
+    url: String!
+}
+
+type RootMutation {
+    startMediaStreaming: MediaStreaming
+}
+
+type MediaStreaming {
+    isRunning: Boolean!
+    errorMsg: String
 }

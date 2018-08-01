@@ -1,0 +1,15 @@
+version: '3'
+services:
+  marsha:
+    image: marsha:${VERSION}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ${DATA_DIR}:/data
+
+  ffserver:
+    image: "vimagick/ffserver"
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./ffserver.conf:/etc/ffserver.conf
