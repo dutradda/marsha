@@ -8,6 +8,10 @@ def build_executable_schema(schema_definition, resolvers):
 
     for typeName in resolvers:
         fieldType = schema.get_type(typeName)
+
+        if not hasattr(fieldType, 'fields') and hasattr(fieldType, 'resolve_type'):
+            fieldType.resolve_type = resolvers[typeName]
+            continue
         
         for fieldName in resolvers[typeName]:            
             if fieldType is graphql.GraphQLScalarType:

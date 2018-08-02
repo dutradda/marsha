@@ -4,35 +4,51 @@ from marsha.media.media import set_stream, StreamInfo
 OUTPUT = 'http://ffserver:8090/c1-48.mp3'
 INPUT = '/data/10 Bem Escuro (Part. Sonianke e Mano Moreles).mp3'
 
-def query_media_resolver(none, info):
-    return {'url': OUTPUT}
+
+def get_media(parent, info, id):
+    return {'title': 'Bem Escuro'}
 
 
-async def start_media_streaming_resolver(none, info):
-    media_streaming = {'isRunning': True, 'errorMsg': ''}
+def get_media_stream(parent, info):
+    return {'uri': OUTPUT, 'isRunning': False}
+
+
+async def run_media_stream(parent, info, id):
     stream_info = StreamInfo(INPUT, OUTPUT)
 
     try:
         await set_stream(stream_info, False)
-    except Exception as error:
-        media_streaming['isRunning'] = False
-        media_streaming['errorMsg'] = str(error)
+        return {'isRunning': True}
 
-    return media_streaming
+    except Exception as error:
+        return {
+            'name': type(error).__name__,
+            'message': str(error)
+        }
+
+
+def run_media_stream_output(parent, info):
+    return 'MediaStream'
 
 
 resolvers = {
     'RootQuery': {
-        'media': query_media_resolver
+        'getMedia': get_media,
+        'getMediaStream': get_media_stream
     },
     'Media': {
-        'url': dict_key_resolver('url')
+        'title': dict_key_resolver('title')
+    },
+    'MediaStream': {
+        'uri': dict_key_resolver('uri'),
+        'isRunning': dict_key_resolver('isRunning')
     },
     'RootMutation': {
-        'startMediaStreaming': start_media_streaming_resolver
+        'runMediaStream': run_media_stream
     },
-    'MediaStreaming': {
-        'isRunning': dict_key_resolver('isRunning'),
-        'errorMsg': dict_key_resolver('errorMsg')
+    'RunMediaStreamOutput': run_media_stream_output,
+    'Error': {
+        'name': dict_key_resolver('name'),
+        'message': dict_key_resolver('message')
     }
 }

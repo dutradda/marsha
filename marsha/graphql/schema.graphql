@@ -1,15 +1,21 @@
-# include Media
-# include MediaStreaming
+# include ../media/schema.graphql
 
 schema {
     query: RootQuery
     mutation: RootMutation
 }
 
-type RootQuery {
-    media: Media
+type RootQuery implements MediaQueries {
+    search(query: String, sorting: Sorting, filters: SearchFilters): [Searchable]!
+    suggests(query: String): [Searchable]!
+    getMedia(id: ID): Media!
+    getCollection(collectionId: ID): [Media]!
+    getMediaStream(mediaId: ID): MediaStream!
 }
 
-type RootMutation {
-    startMediaStreaming: MediaStreaming
+type RootMutation implements MediaMutations {
+    bulkInsertMedia(datas: [String]): [MediaInsertOutput]!
+    bulkDeleteMedia(ids: [ID]): [Boolean]!
+    bulkEditMedia(edits: [EditMedia]): [EditMediaOutput]!
+    runMediaStream(id: ID): RunMediaStreamOutput!
 }

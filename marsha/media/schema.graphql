@@ -1,10 +1,14 @@
 type Media implements Searchable {
     id: ID!
+    title: String!
     type: MediaType!
     artists: [Person]!
     authors: [Person]!
+    addedDate: String!
+    releaseDate: String!
     groups: [GroupOfPeople]
     collections: [Collection]
+    content: String
 }
 
 interface Searchable {
@@ -19,7 +23,21 @@ type MediaType {
 type Person implements Searchable  {
     id: ID!
     name: String!
+    location: Location!
+    organization: Organization
     groups: [GroupOfPeople]
+}
+
+type Location {
+    country: String!
+    province: String!
+    city: String!
+    neighborhood: String
+}
+
+type Organization {
+    name: String!
+    location: Location!
 }
 
 type GroupOfPeople implements Searchable  {
@@ -45,26 +63,86 @@ type MediaStream {
     id: ID!
     uri: String!
     isRunning: Boolean!
-    errorMsg: String
-}
-
-interface MediaMutations {
-    runMediaStream(MediaStreamId: ID): MediaStream!
 }
 
 interface MediaQueries {
-    search(query: String): [Searchable]
-    suggests(query: String): [Searchable]
-    getMedias(mediaQuery: MediaQuery): [Media]
+    search(query: String, sorting: Sorting, filters: SearchFilters): [Searchable]!
+    suggests(query: String): [Searchable]!
+    getMedia(id: ID): Media!
+    getCollection(collectionId: ID): [Media]!
     getMediaStream(mediaId: ID): MediaStream!
-    getArtists(mediaQuery: ArtistQuery): [Media]
 }
 
-input MediaQuery {
-     queryString: String
-     artirstId: ID
-     authorId: ID
-     mediaId: ID
-     groupId: ID
-     collectionId: ID
- }
+enum Sorting {
+    byRelevance
+    byNovelty
+    byRecentAdded
+    byOrganization
+    byLocation
+}
+
+input SearchFilters {
+    location: ID
+    organization: ID
+    artist: ID
+    author: ID
+    group: ID
+    collection: ID
+    novelty: Boolean
+    recentAdded: Boolean
+    searchableKind: SearchableKinds
+}
+
+enum SearchableKinds {
+    media
+    collection
+    artist
+    author
+    group
+}
+
+interface MediaMutations {
+    bulkInsertMedia(datas: [String]): [MediaInsertOutput]!
+    bulkDeleteMedia(ids: [ID]): [Boolean]!
+    bulkEditMedia(edits: [EditMedia]): [EditMediaOutput]!
+    runMediaStream(id: ID): RunMediaStreamOutput!
+}
+
+union MediaInsertOutput = Media | Error
+
+type Error {
+    name: String!
+    message: String!
+    status: String
+    extraInfo: String
+}
+
+input EditMedia {
+    id: ID!
+    add: [EditMediaItems]
+    remove: [EditMediaItems]
+}
+
+input EditMediaItems {
+    artistIds: [ID]
+    authorIds: [ID]
+    groupIds: [ID]
+    collectionIds: [ID]
+}
+
+type EditMediaOutput {
+    id: ID!
+    addSuccess: [EditMediaOutputItems]
+    addFails: [EditMediaOutputItems]
+    removeSuccess: [EditMediaOutputItems]
+    removeFails: [EditMediaOutputItems]
+}
+
+type EditMediaOutputItems {
+    artists: [ID]
+    authors: [ID]
+    groups: [ID]
+    collections: [ID]
+}
+
+union RunMediaStreamOutput = MediaStream | Error
