@@ -10,7 +10,10 @@ from get_version import read_version
 install_requires = [
     'sanic>=0.7.0',
     'sanic_graphql>=1.1.0',
-    'ffmpeg-python>=0.1.16'
+    'ffmpeg-python>=0.1.16',
+    'sqlalchemy>=1.2.10',
+    'aioredis>=1.1.0',
+    'aioes>=0.7.2'
 ]
 
 tests_require = [

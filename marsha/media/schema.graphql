@@ -1,0 +1,70 @@
+type Media implements Searchable {
+    id: ID!
+    type: MediaType!
+    artists: [Person]!
+    authors: [Person]!
+    groups: [GroupOfPeople]
+    collections: [Collection]
+}
+
+interface Searchable {
+    id: ID!
+}
+
+type MediaType {
+    id: ID!
+    name: String!
+}
+
+type Person implements Searchable  {
+    id: ID!
+    name: String!
+    groups: [GroupOfPeople]
+}
+
+type GroupOfPeople implements Searchable  {
+    id: ID!
+    name: String!
+    people: [Person]
+    collections: [Collection]
+}
+
+type Collection implements Searchable  {
+    id: ID!
+    name: String!
+    medias: [Media]
+    type: CollectionType
+}
+
+type CollectionType {
+    id: ID!
+    name: String!
+}
+
+type MediaStream {
+    id: ID!
+    uri: String!
+    isRunning: Boolean!
+    errorMsg: String
+}
+
+interface MediaMutations {
+    runMediaStream(MediaStreamId: ID): MediaStream!
+}
+
+interface MediaQueries {
+    search(query: String): [Searchable]
+    suggests(query: String): [Searchable]
+    getMedias(mediaQuery: MediaQuery): [Media]
+    getMediaStream(mediaId: ID): MediaStream!
+    getArtists(mediaQuery: ArtistQuery): [Media]
+}
+
+input MediaQuery {
+     queryString: String
+     artirstId: ID
+     authorId: ID
+     mediaId: ID
+     groupId: ID
+     collectionId: ID
+ }

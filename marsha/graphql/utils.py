@@ -34,3 +34,7 @@ def _dict_key_resolver(key, dict_, info):
 
 def dict_key_resolver(key):
     functools.partial(_dict_key_resolver, key)
+
+
+def build_sqlalchemy_models(graphqlTypes, schema, declarative_base=None):
+    pass
