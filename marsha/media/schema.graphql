@@ -102,7 +102,7 @@ enum SearchableKinds {
 }
 
 interface MediaMutations {
-    bulkInsertMedia(datas: [String]): [MediaInsertOutput]!
+    bulkInsertMedia(data: String): [MediaInsertOutput]!
     bulkDeleteMedia(ids: [ID]): [Boolean]!
     bulkEditMedia(edits: [EditMedia]): [EditMediaOutput]!
     runMediaStream(id: ID): RunMediaStreamOutput!

@@ -6,7 +6,9 @@ INPUT = '/data/10 Bem Escuro (Part. Sonianke e Mano Moreles).mp3'
 
 
 def get_media(parent, info, id):
-    return {'title': 'Bem Escuro'}
+    return {
+        'title': 'Bem Escuro'
+    }
 
 
 def get_media_stream(parent, info):
@@ -31,6 +33,17 @@ def run_media_stream_output(parent, info):
     return 'MediaStream'
 
 
+def bulk_insert_media(parent, info):
+    print(info.context['request'].files)
+    return [{
+        'title': 'Test'
+    }]
+
+
+def media_insert_output(parent, info):
+    return 'Media'
+
+
 resolvers = {
     'RootQuery': {
         'getMedia': get_media,
@@ -44,11 +57,13 @@ resolvers = {
         'isRunning': dict_key_resolver('isRunning')
     },
     'RootMutation': {
-        'runMediaStream': run_media_stream
+        'runMediaStream': run_media_stream,
+        'bulkInsertMedia': bulk_insert_media
     },
     'RunMediaStreamOutput': run_media_stream_output,
     'Error': {
         'name': dict_key_resolver('name'),
         'message': dict_key_resolver('message')
-    }
+    },
+    'MediaInsertOutput': media_insert_output
 }
