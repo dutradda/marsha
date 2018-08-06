@@ -6,6 +6,9 @@ def build_executable_schema(schema_definition, resolvers):
     ast = graphql.parse(schema_definition)
     schema = graphql.build_ast_schema(ast)
 
+    if not resolvers:
+        raise ValueError("resolvers can't be empty")
+
     for typeName in resolvers:
         fieldType = schema.get_type(typeName)
 

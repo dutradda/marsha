@@ -43,3 +43,12 @@ activate-venv:
 
 clean-dist:
 	rm -rf dist/*
+
+test:
+	docker run -i \
+		-a stdin \
+		-a stdout \
+		-p 8080:8080 \
+		--entrypoint 'tox' \
+		-v "$(shell pwd):/app" \
+		-t ${NAME}:${VERSION}

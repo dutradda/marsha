@@ -8,10 +8,10 @@ RUN sh -c 'echo "deb http://www.deb-multimedia.org stretch main non-free" >> /et
 
 ARG VERSION
 
-WORKDIR /
-COPY dist/marsha-${VERSION}.tar.gz /
+WORKDIR /app
+COPY dist/marsha-${VERSION}.tar.gz /app
 
-RUN pip install /marsha-${VERSION}.tar.gz
+RUN pip install /app/marsha-${VERSION}.tar.gz tox
 
 EXPOSE 8080
 
