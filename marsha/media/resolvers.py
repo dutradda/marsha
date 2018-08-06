@@ -1,4 +1,3 @@
-from marsha.graphql.utils import build_type_resolver
 from marsha.media.media import set_stream, StreamInfo
 
 OUTPUT = 'http://ffserver:8090/c1-48.mp3'
@@ -67,15 +66,14 @@ resolvers = {
         'getMediaStream': get_media_stream_query,
         'search': search_query
     },
-    'Media': build_type_resolver('title'),
-    'MediaStream': build_type_resolver('uri', 'isRunning'),
-    'Searchable': searchable_union,
     'RootMutation': {
         'runMediaStream': run_media_stream_mutation,
         'bulkInsertMedia': bulk_insert_media_mutation
     },
+    'Searchable': searchable_union,
     'RunMediaStreamOutput': run_media_stream_output_union,
-    'BulkInsertMediaOutput': build_type_resolver('status', 'currentCount',
-                                                 'totalCount', 'error'),
-    'Error': build_type_resolver('name', 'message')
+    'MediaStream': {},
+    'Media': {},
+    'BulkInsertMediaOutput': {},
+    'Error': {}
 }

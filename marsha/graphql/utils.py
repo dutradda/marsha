@@ -32,18 +32,5 @@ def build_executable_schema(schema_definition, resolvers):
     return schema
 
 
-def _dict_key_resolver(key, dict_, info):
-    return dict_[key]
-
-
-def dict_key_resolver(key):
-    functools.partial(_dict_key_resolver, key)
-
-
-def build_type_resolver(*type_fields):
-    return {
-        field: dict_key_resolver(field) for field in type_fields
-    }
-
 def build_sqlalchemy_models(graphqlTypeNames, schema, declarative_base=None):
     pass
