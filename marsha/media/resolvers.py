@@ -54,7 +54,7 @@ def bulk_insert_media_mutation(parent, info):
 
 
 def search_query(parent, info, query):
-    return [get_media(parent, info, query)]
+    return [get_media_query(parent, info, query)]
 
 
 def searchable_union(parent, info):
