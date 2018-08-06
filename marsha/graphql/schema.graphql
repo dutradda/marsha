@@ -14,7 +14,7 @@ type RootQuery implements MediaQueries {
 }
 
 type RootMutation implements MediaMutations {
-    bulkInsertMedia(data: String): [MediaInsertOutput]!
+    bulkInsertMedia: BulkInsertMediaOutput!
     bulkDeleteMedia(ids: [ID]): [Boolean]!
     bulkEditMedia(edits: [EditMedia]): [EditMediaOutput]!
     runMediaStream(id: ID): RunMediaStreamOutput!

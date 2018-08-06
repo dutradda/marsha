@@ -1,4 +1,4 @@
-type Media implements Searchable {
+type Media {
     id: ID!
     title: String!
     type: MediaType!
@@ -11,16 +11,12 @@ type Media implements Searchable {
     content: String
 }
 
-interface Searchable {
-    id: ID!
-}
-
 type MediaType {
     id: ID!
     name: String!
 }
 
-type Person implements Searchable  {
+type Person {
     id: ID!
     name: String!
     location: Location!
@@ -40,14 +36,14 @@ type Organization {
     location: Location!
 }
 
-type GroupOfPeople implements Searchable  {
+type GroupOfPeople {
     id: ID!
     name: String!
     people: [Person]
     collections: [Collection]
 }
 
-type Collection implements Searchable  {
+type Collection {
     id: ID!
     name: String!
     medias: [Media]
@@ -101,14 +97,21 @@ enum SearchableKinds {
     group
 }
 
+union Searchable = Media | Person | Collection | GroupOfPeople | Organization
+
 interface MediaMutations {
-    bulkInsertMedia(data: String): [MediaInsertOutput]!
+    bulkInsertMedia: BulkInsertMediaOutput!
     bulkDeleteMedia(ids: [ID]): [Boolean]!
     bulkEditMedia(edits: [EditMedia]): [EditMediaOutput]!
     runMediaStream(id: ID): RunMediaStreamOutput!
 }
 
-union MediaInsertOutput = Media | Error
+type BulkInsertMediaOutput {
+    status: String!
+    currentCount: Int!
+    totalCount: Int!
+    error: Error
+}
 
 type Error {
     name: String!

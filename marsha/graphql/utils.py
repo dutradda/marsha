@@ -12,7 +12,7 @@ def build_executable_schema(schema_definition, resolvers):
         if not hasattr(fieldType, 'fields') and hasattr(fieldType, 'resolve_type'):
             fieldType.resolve_type = resolvers[typeName]
             continue
-        
+
         for fieldName in resolvers[typeName]:            
             if fieldType is graphql.GraphQLScalarType:
                 fieldType.fields[fieldName].resolver = resolvers[typeName][fieldName]
@@ -39,6 +39,11 @@ def _dict_key_resolver(key, dict_, info):
 def dict_key_resolver(key):
     functools.partial(_dict_key_resolver, key)
 
+
+def build_type_resolver(*type_fields):
+    return {
+        field: dict_key_resolver(field) for field in type_fields
+    }
 
 def build_sqlalchemy_models(graphqlTypeNames, schema, declarative_base=None):
     pass

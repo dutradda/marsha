@@ -1,21 +1,22 @@
-from marsha.graphql.utils import dict_key_resolver
+from marsha.graphql.utils import build_type_resolver
 from marsha.media.media import set_stream, StreamInfo
 
 OUTPUT = 'http://ffserver:8090/c1-48.mp3'
 INPUT = '/data/10 Bem Escuro (Part. Sonianke e Mano Moreles).mp3'
 
 
-def get_media(parent, info, id):
+def get_media_query(parent, info, id):
     return {
+        'id': 1,
         'title': 'Bem Escuro'
     }
 
 
-def get_media_stream(parent, info):
+def get_media_stream_query(parent, info):
     return {'uri': OUTPUT, 'isRunning': False}
 
 
-async def run_media_stream(parent, info, id):
+async def run_media_stream_mutation(parent, info, id):
     stream_info = StreamInfo(INPUT, OUTPUT)
 
     try:
@@ -29,41 +30,52 @@ async def run_media_stream(parent, info, id):
         }
 
 
-def run_media_stream_output(parent, info):
+def run_media_stream_output_union(parent, info):
     return 'MediaStream'
 
 
-def bulk_insert_media(parent, info):
-    print(info.context['request'].files)
-    return [{
-        'title': 'Test'
-    }]
+def bulk_insert_media_mutation(parent, info):
+    if not info.context['request'].files:
+        return {
+            'status': 'error',
+            'currentCount': -1,
+            'totalCount': -1,
+            'error': {
+                'name':  'Error',
+                'message': 'Got an error'
+            }
+        }
+    return {
+        'status': 'success',
+        'currentCount': 1,
+        'totalCount': 1,
+        'error': None
+    }
 
 
-def media_insert_output(parent, info):
+def search_query(parent, info, query):
+    return [get_media(parent, info, query)]
+
+
+def searchable_union(parent, info):
     return 'Media'
 
 
 resolvers = {
     'RootQuery': {
-        'getMedia': get_media,
-        'getMediaStream': get_media_stream
+        'getMedia': get_media_query,
+        'getMediaStream': get_media_stream_query,
+        'search': search_query
     },
-    'Media': {
-        'title': dict_key_resolver('title')
-    },
-    'MediaStream': {
-        'uri': dict_key_resolver('uri'),
-        'isRunning': dict_key_resolver('isRunning')
-    },
+    'Media': build_type_resolver('title'),
+    'MediaStream': build_type_resolver('uri', 'isRunning'),
+    'Searchable': searchable_union,
     'RootMutation': {
-        'runMediaStream': run_media_stream,
-        'bulkInsertMedia': bulk_insert_media
+        'runMediaStream': run_media_stream_mutation,
+        'bulkInsertMedia': bulk_insert_media_mutation
     },
-    'RunMediaStreamOutput': run_media_stream_output,
-    'Error': {
-        'name': dict_key_resolver('name'),
-        'message': dict_key_resolver('message')
-    },
-    'MediaInsertOutput': media_insert_output
+    'RunMediaStreamOutput': run_media_stream_output_union,
+    'BulkInsertMediaOutput': build_type_resolver('status', 'currentCount',
+                                                 'totalCount', 'error'),
+    'Error': build_type_resolver('name', 'message')
 }
